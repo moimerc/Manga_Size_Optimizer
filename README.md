@@ -4,6 +4,23 @@
 
 The **Manga Size Optimizer** is a multi-threaded Python toolkit for reducing the file size of image archives. It handles the extraction, resizing, format conversion (to WebP), and repacking of image directories and ZIP files.
 
+## Expected Directory Structure
+
+Both scripts operate in batch mode. They expect the target base directory (`BASE_DIR`) to contain **subfolders** or **individual archive files (ZIPs)**, rather than loose, unorganized image files. 
+
+You must set the `BASE_DIR` variable in the scripts to point to a root directory structured as follows:
+
+```text
+BASE_DIR/
+├── target_item_1.zip
+├── target_folder_2/
+│   ├── 01.jpg
+│   └── 02.jpg
+└── target_item_3.zip
+```
+
+The scripts will iterate through these sub-items and process them in parallel using multi-threading.
+
 ## Components
 
 ### 1. `webp_converter.py`
