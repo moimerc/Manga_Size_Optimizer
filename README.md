@@ -1,6 +1,6 @@
 # Manga Size Optimizer
 
-## Project Overview
+## Script Overview
 
 The **Manga Size Optimizer** is a multi-threaded Python toolkit for reducing the file size of image archives. It handles the extraction, resizing, format conversion (to WebP), and repacking of image directories and ZIP files.
 
