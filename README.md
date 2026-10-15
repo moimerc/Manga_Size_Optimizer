@@ -1,14 +1,11 @@
 # Manga Size Optimizer
 
-## Script Overview
-
-The **Manga Size Optimizer** is a multi-threaded Python toolkit for reducing the file size of image archives. It handles the extraction, resizing, format conversion (to WebP), and repacking of image directories and ZIP files.
+## Overview
+A multi-threaded Python toolkit for reducing the size of image archives. It handles extraction, resizing, format conversion (to WebP), and repacking of image folders and ZIP files.
 
 ## Expected Directory Structure
 
-Both scripts operate in batch mode. They expect the target base directory (`BASE_DIR`) to contain **subfolders** or **individual archive files (ZIPs)**, rather than loose, unorganized image files. 
-
-You must set the `BASE_DIR` variable in the scripts to point to a root directory structured as follows:
+Both scripts operate in batch mode over `BASE_DIR`, which must contain subfolders and/or ZIP archives — not loose image files.
 
 ```text
 BASE_DIR/
@@ -19,31 +16,27 @@ BASE_DIR/
 └── target_item_3.zip
 ```
 
-The scripts will iterate through these sub-items and process them in parallel using multi-threading.
+Set the `BASE_DIR` variable in each script to point to this root.
 
-## Components
+## Scripts
 
-### 1. `webp_converter.py`
+### `webp_converter.py`
+Processes existing ZIP archives: extracts, resizes, and converts internal images to WebP.
 
-Processes existing ZIP archives to resize and convert internal images.
+* **Resizing**: Scales down images exceeding `TARGET_HEIGHT` (default 2400px) using Lanczos resampling.
+* **Conversion**: Converts common image formats (JPG, PNG, BMP, TIFF, WebP) to WebP at `WEBP_QUALITY` (default 80).
+* **Repacking**: Rebuilds the ZIP after conversion and replaces the original only once the new archive is fully written.
 
-* **Resizing & Conversion:** Scales down images exceeding a target height (default: 2400px) using Lanczos resampling.
-* **WebP Output:** Converts JPG, PNG, and TIFF images to WebP format (default quality: 80). Preserves transparency and color modes during conversion.
-* **Repacking:** Extracts the archive to a temporary directory, converts the contents, and repacks them into a new ZIP file.
-* **Replacement:** Replaces the original ZIP archive only after the new archive is fully constructed and saved.
+### `folder2zip.py`
+Compresses raw image folders into ZIP archives.
 
-### 2. `folder2zip.py`
-
-Compresses raw image directories into ZIP archives using parallel processing.
-
-* **Parallel Archiving:** Compresses multiple directories concurrently using `ZIP_DEFLATED`.
-* **Integrity Verification:** Uses `testzip()` and file count matching to verify the generated ZIP archive against the source directory.
-* **Source Deletion:** Removes the original source folder only if the verification phase passes without errors or file count mismatches.
+* **Parallel archiving**: Compresses multiple folders concurrently with `ZIP_DEFLATED`.
+* **Verification**: Confirms archive integrity via `testzip()` and file count matching.
+* **Safe deletion**: Removes the source folder only if verification passes cleanly.
 
 ## Requirements
-
-* **Python:** 3.8+
-* **Dependencies:** `Pillow>=9.0.0`
+* Python 3.8+
+* `Pillow>=9.1.0`
 
 ```bash
 pip install Pillow
@@ -51,15 +44,10 @@ pip install Pillow
 
 ## Usage
 
-1. Open `webp_converter.py` or `folder2zip.py` and set the `BASE_DIR` variable to your target directory.
-2. Run the script from the terminal:
+1. Set `BASE_DIR` in the target script to your input directory.
+2. Run:
 
-**To process existing ZIP archives:**
 ```bash
-python webp_converter.py
-```
-
-**To pack directories into ZIP archives:**
-```bash
-python folder2zip.py
+python webp_converter.py   # Optimize existing ZIP archives
+python folder2zip.py       # Pack folders into ZIP archives
 ```
